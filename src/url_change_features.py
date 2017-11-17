@@ -4,7 +4,7 @@ import datetime
 from urllib.request import urlopen
 import ssl
 import OpenSSL
-import MySQLdb
+#import MySQLdb
 
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
@@ -51,7 +51,6 @@ class URL_to_list():
         
 
     # 1.1.1 Using the IP Address
-    #
     def having_IP_Address(self):
         # {-1, 1}
         re_addr = re.compile("((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))")
@@ -94,7 +93,11 @@ class URL_to_list():
     # 1.1.5 Redirecting using "//"
     def double_slash_redirecting(self):
         # {-1, 1}
-        pass
+        double_slash_num = len(re.findall('//', self.url))
+        if double_slash_num > 1:
+            return -1
+        else:
+            return 1
 
     # 1.1.6 Adding Prefix or Suffix Separated by (-) to the Domain
     def Prefix_Suffix(self):
@@ -104,12 +107,20 @@ class URL_to_list():
                 ans = -1
                 break
             else:
-                ans = 0
+                ans = 1
         return ans
     
     # 1.1.7 Sub Domain and Multi Sub Domains
     def having_Sub_Domain(self):
         # {-1,0,1}
+        print('{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(self.url)))
+        print(self.parsed_url.netloc)
+        self.domain_name = self.parsed_url.netloc
+        print(self.parsed_url.netloc.count('.'))
+        # wwwが存在するかを調べる
+        if re.match(r'^www.', self.parsed_url.netloc):
+            print('www exist')
+            self.domain_name = self.domain_name[4:]
         pass
     
     # 1.1.8 HTTPS(Hyper Text Transfer Protocol with Secure Sockets Layer)

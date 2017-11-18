@@ -5,7 +5,8 @@ from urllib.request import urlopen
 import ssl
 import OpenSSL
 #import MySQLdb
-
+import tldextract
+#tldextract.extract(url)
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
@@ -72,7 +73,6 @@ class URL_to_list():
         return ans
 
     # 1.1.3 Using URL Shortening Services "TinyURL"
-    # return があっている分からない
     def Shortining_Service(self):
         # {1,-1}
         if(self.url == self.old_url):
@@ -113,16 +113,14 @@ class URL_to_list():
     # 1.1.7 Sub Domain and Multi Sub Domains
     def having_Sub_Domain(self):
         # {-1,0,1}
-        print('{uri.scheme}://{uri.netloc}/'.format(uri=urlparse(self.url)))
-        print(self.parsed_url.netloc)
-        self.domain_name = self.parsed_url.netloc
-        print(self.parsed_url.netloc.count('.'))
-        # wwwが存在するかを調べる
-        if re.match(r'^www.', self.parsed_url.netloc):
-            print('www exist')
-            self.domain_name = self.domain_name[4:]
-        pass
-    
+        self.ext = tldextract.extract(self.url)
+        if (self.ext.domain.count('.') or self.ext.subdomain.count('.') or self.ext.suffix.count('.')) == 0:
+              return 1
+        elif ((self.ext.domain.count('.') or self.ext.subdomain.count('.') or self.ext.suffix.count('.')) == 1):
+            return 0
+        else:
+              return -1
+            
     # 1.1.8 HTTPS(Hyper Text Transfer Protocol with Secure Sockets Layer)
     def SSLfinal_State(self):
         # {-1, 1, 0}

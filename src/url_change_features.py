@@ -143,6 +143,11 @@ class URL_to_list():
         pass
     # 1.1.12 The Existence of "HTTPS" Token in the Domain Part of the URL
     def HTTPS_token(self):
+        httpstoken = len(re.findall('https', self.parsed_url.netloc))
+        if httpstoken == 0:
+            return 1
+        else:
+            return -1
         # {-1, 1}
         pass
     # 1.2.1 Request URL
@@ -252,10 +257,18 @@ class URL_to_list():
         result関数は全ての特徴量をlistとして返す
         """
         url_data_list = []
-        url_data_list.append(self.having_IP_Address())       # 1.1.1
-        url_data_list.append(self.URL_Length())              # 1.1.2
-        url_data_list.append(self.Shortining_Service())      # 1.1.3
-        url_data_list.append(self.having_At_Symbol())        # 1.1.4
-        url_data_list.append(self.URL_of_Anchor())           # 1.2.2
-        url_data_list.append(self.Submitting_to_email())     # 1.2.5
+        url_data_list.append(self.having_IP_Address())              # 1.1.1
+        url_data_list.append(self.URL_Length())                     # 1.1.2
+        url_data_list.append(self.Shortining_Service())             # 1.1.3
+        url_data_list.append(self.having_At_Symbol())               # 1.1.4
+        url_data_list.append(self.double_slash_redirecting())       # 1.1.5
+        url_data_list.append(self.Prefix_Suffix())                  # 1.1.6
+        url_data_list.append(self.having_Sub_Domain())              # 1.1.7
+        #url_data_list.append(self.SSLfinal_State())                # 1.1.8
+        #url_data_list.append(self.Domain_registeration_length())    # 1.1.9
+        #url_data_list.append(self.Favicon())                        # 1.1.10
+        url_data_list.append(self.HTTPS_token())                    # 1.1.12
+        url_data_list.append(self.URL_of_Anchor())                  # 1.2.2
+        url_data_list.append(self.Submitting_to_email())            # 1.2.5
+        url_data_list.append(self.Iframe())                         # 1.3.5
         return url_data_list
